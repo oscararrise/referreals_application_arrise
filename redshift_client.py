@@ -79,24 +79,44 @@ query_table_vw_jbv_job_custom_fields = """
 
 
 query_obtain_list_applications = """
-select
-
-DISTINCT 
-job_title
-from hr_ops_jbv_schematic.vw_jbv_job
+SELECT DISTINCT
+    job_title,
+    job_location_country,
+    job_requisition_id
+FROM hr_ops_jbv_schematic.vw_jbv_job
 WHERE job_status = 'Open'
+  AND job_title IS NOT NULL
+  AND job_location_country IS NOT NULL
+  AND LOWER(job_title) NOT LIKE '%withdrawal%'
+  AND LOWER(job_title) NOT LIKE '%test%'
+  AND LOWER(job_title) NOT LIKE '%tst%'
+  AND LOWER(job_publish_option) LIKE '%external%'
+ORDER BY job_location_country, job_title, job_requisition_id;
 """
+
 
 def obtain_list_applications():
     conn = None
     try:
         conn = get_redshift_connection()
         df = pd.read_sql(query_obtain_list_applications, conn)
-        job_titles = df['job_title'].dropna().unique().tolist()
-        return job_titles
+
+        df = df.dropna(subset=["job_title", "job_location_country"])
+
+        formatted_roles = [
+            f"{row['job_location_country']} - {row['job_title']}"
+            for _, row in df.iterrows()
+        ]
+
+        return formatted_roles
+
     except Exception as e:
         print("Error executing query:", e)
         return []
+
+    finally:
+        if conn:
+            conn.close()
 
 def build_referral_link_by_role(role_name, user_id):
     conn = None

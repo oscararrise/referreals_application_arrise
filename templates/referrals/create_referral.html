@@ -12,74 +12,138 @@
                 </p>
             </div>
 
-            <form method="post">
+            <form method="post" novalidate>
                 {% csrf_token %}
 
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
                 <div class="row g-3">
+
                     <div class="col-md-6">
                         <label class="form-label">Candidate Name</label>
                         {{ form.candidate_name }}
+
+                        {% if form.candidate_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.candidate_name.errors.0 }}
+                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Candidate Email</label>
                         {{ form.candidate_email }}
+
+                        {% if form.candidate_email.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.candidate_email.errors.0 }}
+                        </div>
+                        {% endif %}
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
+                        <label class="form-label">Candidate Phone</label>
+                        {{ form.candidate_phone }}
+
+                        {% if form.candidate_phone.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.candidate_phone.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Country</label>
+                        {{ form.country }}
+
+                        {% if form.country.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.country.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">City</label>
+                        {{ form.city }}
+
+                        {% if form.city.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.city.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
                         <label class="form-label">Role Name</label>
                         {{ form.role_name }}
+
+                        {% if form.role_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.role_name.errors.0 }}
+                        </div>
+                        {% endif %}
+
                         <datalist id="role-name-options">
-                            {% for role in form.role_name_options %}
+                            {% for role in role_name_options %}
                             <option value="{{ role }}"></option>
                             {% endfor %}
                         </datalist>
                     </div>
+
                 </div>
 
-                <div class="mt-4 d-flex gap-2 flex-wrap">
-                    <button type="submit" name="action" value="generate_link" class="btn btn-arrise-primary">
-                        Generate Link
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-arrise-primary">
+                        Generate Referral
                     </button>
-                    <button type="submit" name="action" value="send_email" class="btn btn-arrise-secondary">
-                        Send Email
-                    </button>
+
+                    <a href="/my/" class="btn btn-arrise-secondary">
+                        Back to Referrals
+                    </a>
                 </div>
-
-                {% if generated_link %}
-                <hr class="my-4">
-
-                <div class="mb-3">
-                    <label class="form-label">Referral Link</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" value="{{ generated_link }}" readonly>
-                        <button
-                            type="button"
-                            class="btn btn-arrise-secondary"
-                            onclick="navigator.clipboard.writeText('{{ generated_link }}')"
-                        >
-                            Copy
-                        </button>
-                    </div>
-                </div>
-
-                {% if generated_qr %}
-                <div class="text-center mt-4">
-                    <label class="form-label d-block mb-2">QR Code</label>
-                    <div class="p-3 bg-white rounded shadow-sm d-inline-block">
-                        <img
-                            src="data:image/png;base64,{{ generated_qr }}"
-                            alt="QR Code"
-                            style="max-width: 200px;"
-                        >
-                    </div>
-                </div>
-                {% endif %}
-
-                {% endif %}
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleInput = document.querySelector('[name="role_name"]');
+        const countryInput = document.querySelector('[name="country"]');
+        const options = document.querySelectorAll("#role-name-options option");
+
+        if (!roleInput) {
+            return;
+        }
+
+        roleInput.addEventListener("change", function () {
+            const selectedValue = roleInput.value.trim();
+
+            const selectedOption = Array.from(options).find(function (option) {
+                return option.value.trim() === selectedValue;
+            });
+
+            if (!selectedOption) {
+                return;
+            }
+
+            const country = selectedOption.dataset.country || "";
+            const cleanRole = selectedOption.dataset.role || "";
+
+            if (countryInput && country) {
+                countryInput.value = country;
+            }
+
+            if (cleanRole) {
+                roleInput.value = cleanRole;
+            }
+        });
+    });
+</script>
 
 {% endblock %}

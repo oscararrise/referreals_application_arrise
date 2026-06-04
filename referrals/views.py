@@ -10,7 +10,7 @@ from django.db.models import Max, Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from redshift_client import build_referral_link_by_role
+from redshift_client import build_referral_link_by_role, obtain_list_applications
 
 from .forms import ReferralForm
 from .models import (
@@ -1167,21 +1167,38 @@ def logout_view(request):
     logout(request)
     return redirect("/login/")
 
+def clean_role_name_from_country_role(value):
+    value = str(value or "").strip()
+
+    if " - " in value:
+        return value.split(" - ", 1)[1].strip()
+
+    return value
 
 @login_required
 def create_referral(request):
     generated_link = None
     generated_qr = None
+
+    role_name_options = obtain_list_applications()
+
+    print("ROLE OPTIONS COUNT:", len(role_name_options), flush=True)
+    print("ROLE OPTIONS SAMPLE:", role_name_options[:5], flush=True)
+
     form = ReferralForm()
+    form.role_name_options = role_name_options
 
     if request.method == "POST":
         action = request.POST.get("action")
         form = ReferralForm(request.POST)
+        form.role_name_options = role_name_options
 
         if form.is_valid():
             candidate_name = form.cleaned_data["candidate_name"]
             candidate_email = form.cleaned_data["candidate_email"]
-            role_name = form.cleaned_data["role_name"]
+
+            role_name_display = form.cleaned_data["role_name"]
+            role_name = clean_role_name_from_country_role(role_name_display)
 
             employee = EmployeeDirectoryHiBob.objects.filter(
                 email=request.user.email.lower()
@@ -1197,25 +1214,27 @@ def create_referral(request):
                 else:
                     generated_link = result["link"]
                     generated_qr = generate_qr_base64(generated_link)
+
                     general_referral_link = (
-                                                "https://jobs.jobvite.com/careers/pragmaticplay/jobs"
-                                                f"?__jvst=Referral&__jvsd=HiBobID_{employee.employee_id}"
-                                            )
+                        "https://jobs.jobvite.com/careers/pragmaticplay/jobs"
+                        f"?__jvst=Referral&__jvsd=HiBobID_{employee.employee_id}"
+                    )
+
                     if action == "generate_link":
                         messages.success(request, "Referral link generated successfully")
 
                     elif action == "send_email":
                         try:
                             send_referral_email_via_power_automate(
-                                                                      candidate_name=candidate_name,
-                                                                      candidate_email=candidate_email,
-                                                                      role_name=role_name,
-                                                                      referral_link=generated_link,
-                                                                      general_referral_link=general_referral_link,
-                                                                      employee_id=employee.employee_id,
-                                                                      sender_email=request.user.email,
-                                                                      employee_name=employee.first_name,
-                                                                  )
+                                candidate_name=candidate_name,
+                                candidate_email=candidate_email,
+                                role_name=role_name,
+                                referral_link=generated_link,
+                                general_referral_link=general_referral_link,
+                                employee_id=employee.employee_id,
+                                sender_email=request.user.email,
+                                employee_name=employee.first_name,
+                            )
                             messages.success(request, "Referral email sent successfully")
                         except Exception as error:
                             messages.error(request, f"Error sending email: {error}")
@@ -1229,6 +1248,7 @@ def create_referral(request):
             "form": form,
             "generated_link": generated_link,
             "generated_qr": generated_qr,
+            "role_name_options": role_name_options,
         },
     )
 
