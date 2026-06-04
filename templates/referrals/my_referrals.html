@@ -1,0 +1,802 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .admin-kpi-card {
+        background: linear-gradient(135deg, #06284A 0%, #0A3A68 100%);
+        color: #ffffff;
+        border-radius: 18px;
+        padding: 22px 20px;
+        min-height: 118px;
+        box-shadow: 0 10px 24px rgba(6, 40, 74, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-kpi-title {
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.76);
+        margin: 0 0 8px 0;
+    }
+
+    .admin-kpi-value {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin: 0;
+        color: #ffffff;
+    }
+
+    .dashboard-divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #b8c7d9, transparent);
+        margin: 30px 0;
+    }
+
+    .dashboard-section-title {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #06284A;
+        margin-bottom: 6px;
+        letter-spacing: -0.01em;
+    }
+
+    .filters-card .form-label {
+        font-weight: 800;
+        color: #06284A;
+        font-size: 0.92rem;
+    }
+
+    .chart-card {
+        border: 1px solid #d8dee9;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(6, 40, 74, 0.08);
+        background: #ffffff;
+        height: 360px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-card-header {
+        border-bottom: 1px solid #e4e9f0;
+        padding: 16px 18px;
+        background: #f8fbfe;
+        flex: 0 0 auto;
+    }
+
+    .chart-card-body {
+        padding: 18px;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .chart-card-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .chart-card-body::-webkit-scrollbar-track {
+        background: #eef3f8;
+        border-radius: 999px;
+    }
+
+    .chart-card-body::-webkit-scrollbar-thumb {
+        background: #9fb5ca;
+        border-radius: 999px;
+    }
+
+    .chart-title {
+        font-size: 0.98rem;
+        font-weight: 800;
+        color: #06284A;
+        margin: 0;
+    }
+
+    .chart-subtitle {
+        font-size: 0.82rem;
+        color: #6c757d;
+        margin: 4px 0 0 0;
+    }
+
+    .chart-row {
+        margin-bottom: 16px;
+    }
+
+    .chart-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .chart-label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 6px;
+        font-size: 0.86rem;
+    }
+
+    .chart-label {
+        font-weight: 700;
+        color: #243447;
+        max-width: 65%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .chart-value {
+        color: #6c757d;
+        white-space: nowrap;
+        font-size: 0.8rem;
+    }
+
+    .chart-bar {
+        height: 12px;
+        border-radius: 999px;
+        background: #eef3f8;
+        overflow: hidden;
+    }
+
+    .chart-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #06284A 0%, #0A66A3 100%);
+        min-width: 4px;
+    }
+
+    .chart-bar-fill-success {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #0B6B4F 0%, #22A06B 100%);
+        min-width: 4px;
+    }
+
+    .dashboard-mini-note {
+        color: #6c757d;
+        font-size: 0.82rem;
+        margin-top: 12px;
+    }
+
+    .filters-card {
+        border: 1px solid #d8dee9;
+        border-radius: 18px;
+        background: #ffffff;
+        padding: 20px;
+        box-shadow: 0 8px 20px rgba(6, 40, 74, 0.06);
+    }
+
+    .admin-table-bordered {
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid #d8dee9;
+    }
+
+    .admin-table-bordered th,
+    .admin-table-bordered td {
+        border-right: 1px solid #d8dee9;
+        border-bottom: 1px solid #d8dee9;
+        padding: 10px 12px;
+        vertical-align: middle;
+    }
+
+    .admin-table-bordered th:last-child,
+    .admin-table-bordered td:last-child {
+        border-right: 0;
+    }
+
+    .admin-table-bordered tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .admin-table-bordered thead th {
+        background: #06284A;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.82rem;
+    }
+
+    .admin-table-bordered tbody td {
+        background: #ffffff;
+        font-size: 0.84rem;
+    }
+
+    .admin-table-bordered tbody tr:hover td {
+        background: #f4f8fc;
+    }
+
+    .payment-date-disclaimer {
+        margin-top: 4px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 0.68rem;
+        font-weight: 500;
+        line-height: 1.2;
+        max-width: 180px;
+        white-space: normal;
+    }
+</style>
+
+<div class="page-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="section-title mb-1">{{ page_title }}</h2>
+            <p class="text-muted mb-0">
+                {% if is_admin %}
+                    Global referral list across the platform.
+                {% else %}
+                    Here you can track the referrals you have submitted.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="/new/" class="btn btn-arrise-primary">+ New Referral</a>
+        </div>
+    </div>
+
+    {% if is_admin and admin_dashboard %}
+        <div class="mb-4">
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Total referrals</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.total_referrals }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Hired</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.hired }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Rejected</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.rejected }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Candidate withdrew</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.candidate_withdrew }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">In progress</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.in_progress }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Eligible for bonus</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.eligible_for_bonus }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Avg days to hire</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.avg_days_to_hire }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Total bonus EUR</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.total_bonus_amount }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="admin-kpi-card">
+                        <p class="admin-kpi-title">Unique referrers</p>
+                        <p class="admin-kpi-value">{{ admin_dashboard.unique_referrers }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_admin and chart_data %}
+        <hr class="dashboard-divider">
+
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div>
+                    <h3 class="dashboard-section-title mb-1">Monthly referral performance</h3>
+                    <p class="text-muted mb-0">
+                        Monthly view of referred candidates and successful hires based on the current filters.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Referrals by month</h4>
+                            <p class="chart-subtitle">
+                                Number of referred candidates grouped by referred month.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.referrals_by_month %}
+                                {% for item in chart_data.referrals_by_month %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.count }} referrals</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">
+                                    No monthly referral data available for the current filters.
+                                </p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                This chart shows referral volume by month.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Hires by month</h4>
+                            <p class="chart-subtitle">
+                                Number of referred candidates hired by month.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.hires_by_month %}
+                                {% for item in chart_data.hires_by_month %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.count }} hires</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill-success" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">
+                                    No monthly hire data available for the current filters.
+                                </p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                This chart only counts referrals with a valid hired date.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="dashboard-divider">
+
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div>
+                    <h3 class="dashboard-section-title mb-1">Referral insights</h3>
+                    <p class="text-muted mb-0">
+                        Quick view of referral performance based on the current filters.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Referral status distribution</h4>
+                            <p class="chart-subtitle">
+                                Hired, rejected and in-progress distribution.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.status_distribution %}
+                                {% for item in chart_data.status_distribution %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.count }} referrals · {{ item.percent }}%</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">No status data available.</p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                Useful to understand if referrals are converting or getting blocked.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Referral bonus regions</h4>
+                            <p class="chart-subtitle">
+                                Full referral volume by bonus region.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.region_distribution %}
+                                {% for item in chart_data.region_distribution %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.count }} referrals · {{ item.percent }}%</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">
+                                    No region data available for the current filters.
+                                </p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                Scroll inside the card to review every region.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Referrer eligibility breakdown</h4>
+                            <p class="chart-subtitle">
+                                Eligible, not eligible and missing source match distribution.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.eligibility_distribution %}
+                                {% for item in chart_data.eligibility_distribution %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.count }} referrals · {{ item.percent }}%</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">
+                                    No eligibility data available for the current filters.
+                                </p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                Useful to understand how much of the referral pipeline can actually trigger bonus payments.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h4 class="chart-title">Bonus exposure by region</h4>
+                            <p class="chart-subtitle">
+                                Estimated gross bonus amount by all regions.
+                            </p>
+                        </div>
+
+                        <div class="chart-card-body">
+                            {% if chart_data.bonus_by_region_distribution %}
+                                {% for item in chart_data.bonus_by_region_distribution %}
+                                    <div class="chart-row">
+                                        <div class="chart-label-row">
+                                            <span class="chart-label" title="{{ item.label }}">{{ item.label }}</span>
+                                            <span class="chart-value">{{ item.amount }} EUR · {{ item.percent }}%</span>
+                                        </div>
+
+                                        <div class="chart-bar">
+                                            <div class="chart-bar-fill" style="width: {{ item.percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted mb-0">
+                                    No bonus amount data available for the current filters.
+                                </p>
+                            {% endif %}
+
+                            <p class="dashboard-mini-note">
+                                Scroll inside the card to review every region, including regions with 0 EUR exposure.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <hr class="dashboard-divider">
+
+    <div class="filters-card mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+                <h3 class="dashboard-section-title mb-1">Filters</h3>
+                <p class="text-muted mb-0">Filter the referral table below.</p>
+            </div>
+        </div>
+
+        <form method="get" class="row g-3">
+
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
+                    <option value="screening" {% if filters.status == "screening" %}selected{% endif %}>Screening</option>
+                    <option value="interview" {% if filters.status == "interview" %}selected{% endif %}>Interview</option>
+                    <option value="offer" {% if filters.status == "offer" %}selected{% endif %}>Offer</option>
+                    <option value="hired" {% if filters.status == "hired" %}selected{% endif %}>Hired</option>
+                    <option value="rejected" {% if filters.status == "rejected" %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Country</label>
+                <input type="text" name="country" class="form-control" value="{{ filters.country }}" placeholder="Country">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-control" value="{{ filters.city }}" placeholder="City">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Role</label>
+                <input type="text" name="role_name" class="form-control" value="{{ filters.role_name }}" placeholder="Role">
+            </div>
+
+            {% if is_admin %}
+                <div class="col-md-3">
+                    <label class="form-label">Referrer is TA?</label>
+                    <select name="is_ta" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.is_ta == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.is_ta == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Referrer is Hiring manager?</label>
+                    <select name="is_hiring_manager" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.is_hiring_manager == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.is_hiring_manager == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Referrer is interviewer?</label>
+                    <select name="is_interviewer" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.is_interviewer == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.is_interviewer == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Terminated before 3 months?</label>
+                    <select name="terminated_before_3_months" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.terminated_before_3_months == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.terminated_before_3_months == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Referrer is self?</label>
+                    <select name="is_self_referral" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.is_self_referral == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.is_self_referral == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Referrer eligibility</label>
+                    <select name="referrer_eligibility" class="form-select">
+                        <option value="">All</option>
+                        <option value="Eligible for bonus" {% if filters.referrer_eligibility == "Eligible for bonus" %}selected{% endif %}>Eligible for bonus</option>
+                        <option value="Not eligible" {% if filters.referrer_eligibility == "Not eligible" %}selected{% endif %}>Not eligible</option>
+                        <option value="Source match not found" {% if filters.referrer_eligibility == "Source match not found" %}selected{% endif %}>Source match not found</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Referral bonus region</label>
+                    <select name="referral_bonus_region" class="form-select">
+                        <option value="">All</option>
+                        {% for region in referral_bonus_regions %}
+                            <option value="{{ region }}" {% if filters.referral_bonus_region == region %}selected{% endif %}>{{ region }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Is relocation required?</label>
+                    <select name="is_relocation_required" class="form-select">
+                        <option value="">All</option>
+                        <option value="Yes" {% if filters.is_relocation_required == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if filters.is_relocation_required == "No" %}selected{% endif %}>No</option>
+                        <option value="--" {% if filters.is_relocation_required == "--" %}selected{% endif %}>Unknown</option>
+                    </select>
+                </div>
+            {% endif %}
+
+            <div class="col-12 d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-arrise-primary">Apply Filters</button>
+                <a href="/my/" class="btn btn-arrise-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    {% if referrals %}
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-3 flex-wrap">
+            <div class="text-muted small">{{ page_obj.paginator.count }} referrals matched</div>
+            <a href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}export=csv" class="btn btn-arrise-secondary">
+                Export CSV
+            </a>
+        </div>
+
+        {% if is_admin %}
+            <div class="table-responsive" style="max-height: 75vh; overflow: auto;">
+                <table class="table table-hover align-middle table-sm admin-table-bordered">
+                    <thead style="position: sticky; top: 0; z-index: 2;">
+                        <tr>
+                            {% for column in admin_columns %}
+                                <th style="white-space: nowrap;">{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in admin_rows %}
+                            <tr>
+                                {% for value in row %}
+                                    <td style="white-space: nowrap;">{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle admin-table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                            <th>Referred Date</th>
+                            <th>
+                                Payment Date
+                                <div class="payment-date-disclaimer">
+                                    Estimated date only. Final payment may vary.
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for referral in referrals %}
+                            <tr>
+                                <td>{{ referral.first_name }} {{ referral.last_name }}</td>
+
+                                <td>
+                                    {% if referral.workflow_state %}
+                                        <span class="badge text-bg-light">{{ referral.display_workflow_state }}</span>
+                                    {% else %}
+                                        <span class="badge text-bg-secondary">--</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ referral.job_title|default:"--" }}</td>
+
+                                <td>
+                                    {% if referral.sent_date %}
+                                        {{ referral.sent_date|date:"M d, Y - h:i A" }}
+                                    {% else %}
+                                        --
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ referral.user_payment_date }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        {% if page_obj.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.previous_page_number }}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.country %}&country={{ filters.country }}{% endif %}{% if filters.city %}&city={{ filters.city }}{% endif %}{% if filters.role_name %}&role_name={{ filters.role_name }}{% endif %}{% if filters.is_ta %}&is_ta={{ filters.is_ta }}{% endif %}{% if filters.is_hiring_manager %}&is_hiring_manager={{ filters.is_hiring_manager }}{% endif %}{% if filters.is_interviewer %}&is_interviewer={{ filters.is_interviewer }}{% endif %}{% if filters.terminated_before_3_months %}&terminated_before_3_months={{ filters.terminated_before_3_months }}{% endif %}{% if filters.is_self_referral %}&is_self_referral={{ filters.is_self_referral }}{% endif %}{% if filters.referrer_eligibility %}&referrer_eligibility={{ filters.referrer_eligibility }}{% endif %}{% if filters.referral_bonus_region %}&referral_bonus_region={{ filters.referral_bonus_region }}{% endif %}{% if filters.is_relocation_required %}&is_relocation_required={{ filters.is_relocation_required }}{% endif %}">
+                                Previous
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.next_page_number }}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.country %}&country={{ filters.country }}{% endif %}{% if filters.city %}&city={{ filters.city }}{% endif %}{% if filters.role_name %}&role_name={{ filters.role_name }}{% endif %}{% if filters.is_ta %}&is_ta={{ filters.is_ta }}{% endif %}{% if filters.is_hiring_manager %}&is_hiring_manager={{ filters.is_hiring_manager }}{% endif %}{% if filters.is_interviewer %}&is_interviewer={{ filters.is_interviewer }}{% endif %}{% if filters.terminated_before_3_months %}&terminated_before_3_months={{ filters.terminated_before_3_months }}{% endif %}{% if filters.is_self_referral %}&is_self_referral={{ filters.is_self_referral }}{% endif %}{% if filters.referrer_eligibility %}&referrer_eligibility={{ filters.referrer_eligibility }}{% endif %}{% if filters.referral_bonus_region %}&referral_bonus_region={{ filters.referral_bonus_region }}{% endif %}{% if filters.is_relocation_required %}&is_relocation_required={{ filters.is_relocation_required }}{% endif %}">
+                                Next
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        {% endif %}
+
+    {% else %}
+        <div class="alert alert-light border">
+            No referrals found.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

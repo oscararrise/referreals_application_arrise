@@ -1,0 +1,119 @@
+[2026-05-27 15:39:23] ==========================================================================================
+[2026-05-27 15:39:23] JOBVITE APPLICATION CSV IMPORT STARTED
+[2026-05-27 15:39:23] CSV path: C:/Users/oscar.jimenez/Downloads/jobvite_applications_hibob.csv
+[2026-05-27 15:39:23] Batch size: 1000
+[2026-05-27 15:39:23] Only HiBob: True
+[2026-05-27 15:39:23] Dry run: True
+[2026-05-27 15:39:23] Started at: 2026-05-27 15:39:23 UTC
+[2026-05-27 15:39:23] Local DB before import | total_records=99375 | hibob_records=16457 | first_sent_date=2022-03-28 07:00:00 UTC | last_sent_date=2026-05-19 02:30:54 UTC | last_updated_date=2026-05-19 02:30:54 UTC
+[2026-05-27 15:39:23] Progress | rows_read=1000 | processed=998 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=2 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=2000 | processed=1993 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=7 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=3000 | processed=2989 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=11 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=4000 | processed=3986 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=14 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=5000 | processed=4973 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=27 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=6000 | processed=5958 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=42 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=7000 | processed=6951 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=49 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=8000 | processed=7934 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=66 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=9000 | processed=8920 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=80 | errors=0
+[2026-05-27 15:39:23] Progress | rows_read=10000 | processed=9920 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=80 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=11000 | processed=10911 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=89 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=12000 | processed=11897 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=103 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=13000 | processed=12842 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=158 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=14000 | processed=13740 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=260 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=15000 | processed=14640 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=360 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=16000 | processed=15556 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=444 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=17000 | processed=16514 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=486 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=18000 | processed=17504 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=496 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=19000 | processed=18487 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=513 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=20000 | processed=19478 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=522 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=21000 | processed=20461 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=539 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=22000 | processed=21461 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=539 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=23000 | processed=22453 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=547 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=25000 | processed=24436 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=564 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=26000 | processed=25431 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=569 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=27000 | processed=26417 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=583 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=28000 | processed=27411 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=589 | errors=0
+[2026-05-27 15:39:24] Progress | rows_read=29000 | processed=28403 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=597 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=30000 | processed=29401 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=599 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=31000 | processed=30393 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=607 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=32000 | processed=31390 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=610 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=33000 | processed=32390 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=610 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=34000 | processed=33385 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=615 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=35000 | processed=34384 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=616 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=36000 | processed=35380 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=620 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=37000 | processed=36378 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=622 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=38000 | processed=37374 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=626 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=39000 | processed=38370 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=630 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=40000 | processed=39368 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=632 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=41000 | processed=40364 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=636 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=42000 | processed=41362 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=638 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=43000 | processed=42360 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=640 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=44000 | processed=43355 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=645 | errors=0
+[2026-05-27 15:39:25] Progress | rows_read=45000 | processed=44352 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=648 | errors=0
+[2026-05-27 15:39:26] ==========================================================================================
+[2026-05-27 15:39:26] JOBVITE APPLICATION CSV IMPORT FINISHED
+[2026-05-27 15:39:26] Progress | rows_read=45540 | processed=44892 | created=0 | updated=0 | skipped_no_application_eid=0 | skipped_no_hibob=648 | errors=0
+[2026-05-27 15:39:26] Local DB after import | total_records=99375 | hibob_records=16457 | first_sent_date=2022-03-28 07:00:00 UTC | last_sent_date=2026-05-19 02:30:54 UTC | last_updated_date=2026-05-19 02:30:54 UTC
+[2026-05-27 15:39:26] Finished at: 2026-05-27 15:39:26 UTC
+[2026-05-27 15:39:26] Duration: 0:00:03.249930
+[2026-05-27 15:39:26] ==========================================================================================
+[2026-05-27 15:40:17] ==========================================================================================
+[2026-05-27 15:40:17] JOBVITE APPLICATION CSV IMPORT STARTED
+[2026-05-27 15:40:17] CSV path: C:/Users/oscar.jimenez/Downloads/jobvite_applications_hibob.csv
+[2026-05-27 15:40:17] Batch size: 1000
+[2026-05-27 15:40:17] Only HiBob: False
+[2026-05-27 15:40:17] Dry run: False
+[2026-05-27 15:40:17] Started at: 2026-05-27 15:40:17 UTC
+[2026-05-27 15:40:18] Local DB before import | total_records=99375 | hibob_records=16457 | first_sent_date=2022-03-28 07:00:00 UTC | last_sent_date=2026-05-19 02:30:54 UTC | last_updated_date=2026-05-19 02:30:54 UTC
+[2026-05-27 15:40:30] Progress | rows_read=1000 | processed=1000 | created=0 | updated=1000 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:40:45] Progress | rows_read=2000 | processed=2000 | created=998 | updated=1002 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:40:58] Progress | rows_read=3000 | processed=3000 | created=1998 | updated=1002 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:41:13] Progress | rows_read=4000 | processed=4000 | created=2998 | updated=1002 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:41:27] Progress | rows_read=5000 | processed=5000 | created=3998 | updated=1002 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:41:40] Progress | rows_read=6000 | processed=6000 | created=4998 | updated=1002 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:41:54] Progress | rows_read=7000 | processed=7000 | created=5677 | updated=1323 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:42:08] Progress | rows_read=8000 | processed=8000 | created=6251 | updated=1749 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:42:22] Progress | rows_read=9000 | processed=9000 | created=7048 | updated=1952 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:42:36] Progress | rows_read=10000 | processed=10000 | created=7862 | updated=2138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:42:52] Progress | rows_read=11000 | processed=11000 | created=7862 | updated=3138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:43:05] Progress | rows_read=12000 | processed=12000 | created=7862 | updated=4138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:43:20] Progress | rows_read=13000 | processed=13000 | created=7862 | updated=5138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:43:34] Progress | rows_read=14000 | processed=14000 | created=7862 | updated=6138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:43:49] Progress | rows_read=15000 | processed=15000 | created=7862 | updated=7138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:44:04] Progress | rows_read=16000 | processed=16000 | created=7862 | updated=8138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:44:18] Progress | rows_read=17000 | processed=17000 | created=7862 | updated=9138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:44:33] Progress | rows_read=18000 | processed=18000 | created=7862 | updated=10138 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:44:47] Progress | rows_read=19000 | processed=19000 | created=8161 | updated=10839 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:45:00] Progress | rows_read=20000 | processed=20000 | created=8896 | updated=11104 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:45:14] Progress | rows_read=21000 | processed=21000 | created=9888 | updated=11112 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:45:25] Progress | rows_read=22000 | processed=22000 | created=10886 | updated=11114 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:45:39] Progress | rows_read=23000 | processed=23000 | created=11874 | updated=11126 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:45:52] Progress | rows_read=24000 | processed=24000 | created=12867 | updated=11133 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:46:05] Progress | rows_read=25000 | processed=25000 | created=13842 | updated=11158 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:46:17] Progress | rows_read=26000 | processed=26000 | created=14819 | updated=11181 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:46:30] Progress | rows_read=27000 | processed=27000 | created=15803 | updated=11197 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:46:43] Progress | rows_read=28000 | processed=28000 | created=16783 | updated=11217 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:46:55] Progress | rows_read=29000 | processed=29000 | created=17760 | updated=11240 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:47:15] Progress | rows_read=30000 | processed=30000 | created=18723 | updated=11277 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:47:26] Progress | rows_read=31000 | processed=31000 | created=19697 | updated=11303 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:47:38] Progress | rows_read=32000 | processed=32000 | created=20680 | updated=11320 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:47:50] Progress | rows_read=33000 | processed=33000 | created=21675 | updated=11325 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:48:00] Progress | rows_read=34000 | processed=34000 | created=22667 | updated=11333 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:48:13] Progress | rows_read=35000 | processed=35000 | created=23641 | updated=11359 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:48:26] Progress | rows_read=36000 | processed=36000 | created=24491 | updated=11509 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:48:38] Progress | rows_read=37000 | processed=37000 | created=25454 | updated=11546 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:48:50] Progress | rows_read=38000 | processed=38000 | created=26385 | updated=11615 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:49:04] Progress | rows_read=39000 | processed=39000 | created=27275 | updated=11725 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:49:15] Progress | rows_read=40000 | processed=40000 | created=28058 | updated=11942 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:49:30] Progress | rows_read=41000 | processed=41000 | created=28576 | updated=12424 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:49:43] Progress | rows_read=42000 | processed=42000 | created=28622 | updated=13378 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:49:57] Progress | rows_read=43000 | processed=43000 | created=28622 | updated=14378 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:50:10] Progress | rows_read=44000 | processed=44000 | created=28622 | updated=15378 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:50:25] Progress | rows_read=45000 | processed=45000 | created=28622 | updated=16378 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:50:32] ==========================================================================================
+[2026-05-27 15:50:32] JOBVITE APPLICATION CSV IMPORT FINISHED
+[2026-05-27 15:50:32] Progress | rows_read=45540 | processed=45540 | created=28671 | updated=16869 | skipped_no_application_eid=0 | skipped_no_hibob=0 | errors=0
+[2026-05-27 15:50:32] Local DB after import | total_records=128046 | hibob_records=44950 | first_sent_date=2022-03-28 07:00:00 UTC | last_sent_date=2026-05-27 08:08:29 UTC | last_updated_date=2026-05-27 08:47:09 UTC
+[2026-05-27 15:50:32] Finished at: 2026-05-27 15:50:32 UTC
+[2026-05-27 15:50:33] Duration: 0:10:15.321816
+[2026-05-27 15:50:33] ==========================================================================================

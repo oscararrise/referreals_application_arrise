@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="page-card">
+            <div class="mb-4">
+                <h2 class="section-title mb-1">Create Referral</h2>
+                <p class="text-muted mb-0">
+                    Generate a referral link and optionally send it by email.
+                </p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Candidate Name</label>
+                        {{ form.candidate_name }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Candidate Email</label>
+                        {{ form.candidate_email }}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label">Role Name</label>
+                        {{ form.role_name }}
+                        <datalist id="role-name-options">
+                            {% for role in form.role_name_options %}
+                            <option value="{{ role }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 flex-wrap">
+                    <button type="submit" name="action" value="generate_link" class="btn btn-arrise-primary">
+                        Generate Link
+                    </button>
+                    <button type="submit" name="action" value="send_email" class="btn btn-arrise-secondary">
+                        Send Email
+                    </button>
+                </div>
+
+                {% if generated_link %}
+                <hr class="my-4">
+
+                <div class="mb-3">
+                    <label class="form-label">Referral Link</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ generated_link }}" readonly>
+                        <button
+                            type="button"
+                            class="btn btn-arrise-secondary"
+                            onclick="navigator.clipboard.writeText('{{ generated_link }}')"
+                        >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                {% if generated_qr %}
+                <div class="text-center mt-4">
+                    <label class="form-label d-block mb-2">QR Code</label>
+                    <div class="p-3 bg-white rounded shadow-sm d-inline-block">
+                        <img
+                            src="data:image/png;base64,{{ generated_qr }}"
+                            alt="QR Code"
+                            style="max-width: 200px;"
+                        >
+                    </div>
+                </div>
+                {% endif %}
+
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

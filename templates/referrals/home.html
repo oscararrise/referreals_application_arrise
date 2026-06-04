@@ -1,0 +1,521 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="home-hero text-center mb-4">
+    <h1 class="home-title">Welcome, {{ request.user.email }}</h1>
+
+    <p class="home-subtitle">
+        {% if is_admin %}
+        Administrator view: global referral performance and platform activity.
+        {% else %}
+        User view: track your referrals and follow their progress.
+        {% endif %}
+    </p>
+</div>
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">Total Referrals</div>
+            <div class="kpi-value">{{ total_referrals }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">In Progress</div>
+            <div class="kpi-value">{{ in_progress }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">Successfully Hired</div>
+            <div class="kpi-value">{{ successfully_hired }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">Eligible for Bonus</div>
+            <div class="kpi-value">{{ eligible_for_bonus }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">Closed Applications</div>
+            <div class="kpi-value">{{ rejected }}</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-2">
+        <div class="kpi-card">
+            <div class="kpi-label">Avg Days to Hire</div>
+            <div class="kpi-value">{{ avg_days_to_hire }}</div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4">
+
+    <div class="col-lg-7">
+        <div class="page-card arrise-vision-card h-100">
+            <div class="arrise-vision-content">
+                <div>
+                    <p class="arrise-eyebrow">Referral Platform</p>
+                    <h2 class="arrise-title">ARRISE Referral Hub 2026</h2>
+                    <p class="arrise-description">
+                        A smarter way to refer great people, track candidate progress and support stronger hiring
+                        decisions across ARRISE.
+                    </p>
+
+                    <div class="arrise-actions">
+                        <a href="/new/" class="btn btn-light arrise-action-primary">Create Referral</a>
+
+                        {% if is_admin %}
+                        <a href="/my/" class="btn btn-outline-light arrise-action-secondary">View All Referrals</a>
+                        {% else %}
+                        <a href="/my/" class="btn btn-outline-light arrise-action-secondary">View My Referrals</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="arrise-badge arrise-bonus-badge">
+                    <span class="arrise-campaign-label">
+                        Active Campaign
+                    </span>
+
+                    <span class="arrise-bonus-text">
+                        {{ bonus_campaign_message }}
+                    </span>
+
+                    {% if bonus_campaign_country %}
+                    <span class="arrise-bonus-country">
+                        {{ bonus_campaign_country }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="page-card how-it-works-card h-100">
+            <h2 class="how-title">How referrals work</h2>
+            <p class="how-subtitle">
+                Follow these simple steps to submit and track a referral.
+            </p>
+
+            <div class="how-step">
+                <div class="how-step-number">1</div>
+                <div>
+                    <div class="how-step-title">Choose the role</div>
+                    <div class="how-step-text">Select the open position that best matches your candidate.</div>
+                </div>
+            </div>
+
+            <div class="how-step">
+                <div class="how-step-number">2</div>
+                <div>
+                    <div class="how-step-title">Share the referral link</div>
+                    <div class="how-step-text">Send the generated link or QR code to your candidate.</div>
+                </div>
+            </div>
+
+            <div class="how-step">
+                <div class="how-step-number">3</div>
+                <div>
+                    <div class="how-step-title">Track the progress</div>
+                    <div class="how-step-text">Follow the application status and bonus eligibility from the platform.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-md-4">
+        <div class="info-card h-100">
+            <div class="info-title">Privacy Policy</div>
+            <div class="info-text">
+                Review how candidate and referral information is handled.
+            </div>
+
+            <a href="PASTE_PRIVACY_POLICY_LINK_HERE" target="_blank" rel="noopener noreferrer"
+                class="btn btn-arrise-primary info-card-button">
+                Open Privacy Policy
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="info-card h-100">
+            <div class="info-title">Referral Manual</div>
+            <div class="info-text">
+                Review the referral process, rules and key steps before submitting a candidate.
+            </div>
+
+            <a href="PASTE_REFERRAL_MANUAL_LINK_HERE" target="_blank" rel="noopener noreferrer"
+                class="btn btn-arrise-primary info-card-button">
+                Open Referral Manual
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="info-card h-100">
+            <div class="info-title">General referral link</div>
+            <div class="info-text">
+                Share this general referral link when your candidate wants to explore all open roles.
+            </div>
+
+            {% if general_referral_link %}
+            <div class="general-link-wrapper">
+                <input type="text" id="generalReferralLink" class="form-control general-link-input"
+                    value="{{ general_referral_link }}" readonly>
+
+                <button type="button" class="btn btn-arrise-primary info-card-button"
+                    onclick="copyGeneralReferralLink()">
+                    Copy Link
+                </button>
+
+                <div id="copyGeneralReferralMessage" class="copy-message">
+                    Link copied.
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-light border mt-3 mb-0">
+                HiBob ID not found for your user.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .home-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #7c6cf0;
+    }
+
+    .home-subtitle {
+        color: #4b5563;
+        font-size: 0.95rem;
+    }
+
+    /* KPI CARDS */
+    .kpi-card {
+        background: #1e3a8a;
+        border-radius: 18px;
+        padding: 1.4rem;
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transition: 0.2s;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .kpi-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .kpi-value {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    /* ARRISE HUB CARD */
+    .arrise-vision-card {
+        background: linear-gradient(135deg, #06284A 0%, #0A3A68 55%, #1e3a8a 100%);
+        border: none;
+        border-radius: 24px;
+        padding: 2rem;
+        color: #ffffff;
+        box-shadow: 0 12px 28px rgba(6, 40, 74, 0.18);
+    }
+
+    .arrise-vision-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .arrise-eyebrow {
+        margin: 0 0 0.4rem 0;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.72);
+    }
+
+    .arrise-title {
+        margin: 0;
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: #ffffff;
+    }
+
+    .arrise-description {
+        margin: 0.8rem 0 0 0;
+        max-width: 650px;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.82);
+    }
+
+    .arrise-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1.4rem;
+    }
+
+    .arrise-action-primary,
+    .arrise-action-secondary {
+        border-radius: 999px;
+        padding: 0.65rem 1.1rem;
+        font-weight: 700;
+    }
+
+    .arrise-badge {
+        min-width: 260px;
+        max-width: 320px;
+        min-height: 150px;
+        border-radius: 32px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        text-align: center;
+        padding: 1.4rem;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 12px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .arrise-campaign-label {
+        display: inline-block;
+        margin-bottom: 0.75rem;
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .arrise-bonus-text {
+        font-size: 1.55rem;
+        font-weight: 950;
+        line-height: 1.12;
+        letter-spacing: -0.03em;
+    }
+
+    .arrise-bonus-country {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.74);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .arrise-bonus-text {
+        font-size: 1.05rem;
+        font-weight: 900;
+        line-height: 1.2;
+    }
+
+    .arrise-bonus-country {
+        margin-top: 0.45rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.72);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works-card {
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid #d8dee9;
+        box-shadow: 0 10px 24px rgba(6, 40, 74, 0.08);
+    }
+
+    .how-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #06284A;
+        margin-bottom: 0.3rem;
+    }
+
+    .how-subtitle {
+        color: #6b7280;
+        margin-bottom: 1.4rem;
+    }
+
+    .how-step {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 1.2rem;
+    }
+
+    .how-step:last-child {
+        margin-bottom: 0;
+    }
+
+    .how-step-number {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: #1e3a8a;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex: 0 0 auto;
+    }
+
+    .how-step-title {
+        color: #06284A;
+        font-weight: 800;
+        margin-bottom: 0.15rem;
+    }
+
+    .how-step-text {
+        color: #6b7280;
+        font-size: 0.92rem;
+    }
+
+    /* INFO CARDS */
+    .info-card {
+        background: #ffffff;
+        border: 1px solid #d8dee9;
+        border-radius: 20px;
+        padding: 1.4rem;
+        box-shadow: 0 8px 20px rgba(6, 40, 74, 0.06);
+    }
+
+    .info-title {
+        color: #06284A;
+        font-weight: 800;
+        margin-bottom: 0.4rem;
+    }
+
+    .info-text {
+        color: #6b7280;
+        font-size: 0.92rem;
+    }
+
+    .info-card-button {
+        margin-top: 1rem;
+        border-radius: 999px;
+        padding: 0.55rem 1rem;
+        font-weight: 700;
+    }
+
+    .general-link-wrapper {
+        margin-top: 1rem;
+    }
+
+    .general-link-input {
+        font-size: 0.82rem;
+        color: #06284A;
+        background: #f8fbfe;
+        border: 1px solid #d8dee9;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+    }
+
+    .copy-message {
+        display: none;
+        color: #198754;
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-top: 0.6rem;
+    }
+
+    @media (max-width: 768px) {
+        .arrise-title {
+            font-size: 1.8rem;
+        }
+
+        .arrise-badge {
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 130px;
+        }
+
+        .arrise-bonus-text {
+            font-size: 1.25rem;
+        }
+
+        .arrise-campaign-label {
+            font-size: 0.68rem;
+        }
+
+        .kpi-value {
+            font-size: 2.3rem;
+        }
+    }
+</style>
+
+<script>
+    function copyGeneralReferralLink() {
+        const input = document.getElementById("generalReferralLink");
+        const message = document.getElementById("copyGeneralReferralMessage");
+
+        if (!input) {
+            return;
+        }
+
+        input.select();
+        input.setSelectionRange(0, 99999);
+
+        navigator.clipboard.writeText(input.value).then(function () {
+            if (message) {
+                message.style.display = "block";
+
+                setTimeout(function () {
+                    message.style.display = "none";
+                }, 1800);
+            }
+        }).catch(function () {
+            document.execCommand("copy");
+
+            if (message) {
+                message.style.display = "block";
+
+                setTimeout(function () {
+                    message.style.display = "none";
+                }, 1800);
+            }
+        });
+    }
+</script>
+
+{% endblock %}
