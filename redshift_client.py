@@ -1,81 +1,56 @@
+import os
 import traceback
 
-import psycopg2
 import pandas as pd
+import psycopg2
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_redshift_connection():
+    required_env_vars = [
+        "REDSHIFT_HOST",
+        "REDSHIFT_PORT",
+        "REDSHIFT_DBNAME",
+        "REDSHIFT_USER",
+        "REDSHIFT_PASSWORD",
+    ]
+
+    missing_vars = [
+        var for var in required_env_vars
+        if not os.getenv(var)
+    ]
+
+    if missing_vars:
+        raise ValueError(
+            f"Missing Redshift environment variables: {', '.join(missing_vars)}"
+        )
+
     return psycopg2.connect(
-        host="tf-redshift-cluster.crjnei9qdhec.eu-west-1.redshift.amazonaws.com",
-        port=5439,
-        dbname="bi_db_rs",
-        user="oscar_j",
-        password="O$c@rJ&91l/",
-        sslmode="require"
+        host=os.getenv("REDSHIFT_HOST"),
+        port=os.getenv("REDSHIFT_PORT", "5439"),
+        dbname=os.getenv("REDSHIFT_DBNAME"),
+        user=os.getenv("REDSHIFT_USER"),
+        password=os.getenv("REDSHIFT_PASSWORD"),
+        sslmode=os.getenv("REDSHIFT_SSLMODE", "require"),
     )
 
 
 def query_redshift(query: str) -> pd.DataFrame:
     conn = None
+
     try:
         conn = get_redshift_connection()
-        df = pd.read_sql(query, conn)
-        return df
+        return pd.read_sql(query, conn)
 
-    except Exception as e:
-        print("Error ejecutando query:", e)
+    except Exception as error:
+        print("Error executing Redshift query:", error)
         return pd.DataFrame()
 
     finally:
         if conn:
             conn.close()
-
-query_table_vw_jbv_application = """
-SELECT
-app_id,
-app_candidate_id,
-app_deleted,
-app_eid,
-job_id,
-app_sent_date,
-app_workflow_state_name,
-app_workflow_state_date,
-app_modified,
-app_sourcetype,
-app_source
-    
-FROM hr_ops_jbv_schematic.vw_jbv_application
-WHERE app_candidate_id = 193183234
-"""
-
-query_table_vw_jbv_job = """
-select
-
-job_requisition_id,
-job_title,
-job_department_name,
-job_workflow_title
-
-from hr_ops_jbv_schematic.vw_jbv_job
-"""
-
-query_table_vw_jbv_candidate_workflow = """ 
-select 
-
-app_next_workflow_state_name,
-app_next_workflow_state_position,
-app_next_workflow_state_date
-
-from hr_ops_jbv_schematic.vw_jbv_candidate_workflow
-"""
-query_table_vw_jbv_job_custom_fields = """
-                                Select 
-                                job_id,
-                                job_custom_field_value,
-                                job_custom_field_name
-                                from hr_ops_jbv_schematic.vw_jbv_job_custom_fields
-                                """
-
 
 
 query_obtain_list_applications = """
@@ -97,6 +72,7 @@ ORDER BY job_location_country, job_title, job_requisition_id;
 
 def obtain_list_applications():
     conn = None
+
     try:
         conn = get_redshift_connection()
         df = pd.read_sql(query_obtain_list_applications, conn)
@@ -110,45 +86,57 @@ def obtain_list_applications():
 
         return formatted_roles
 
-    except Exception as e:
-        print("Error executing query:", e)
+    except Exception as error:
+        print("Error obtaining application list:", error)
         return []
 
     finally:
         if conn:
             conn.close()
 
+
 def build_referral_link_by_role(role_name, user_id):
     conn = None
-    query_obtain_list_applications = """
-select
-    distinct
-    job_title,
-    job_eid as eid
-from hr_ops_jbv_schematic.vw_jbv_job
-where job_status = 'Open'
 
-"""
+    query = """
+    SELECT DISTINCT
+        job_title,
+        job_eid AS eid
+    FROM hr_ops_jbv_schematic.vw_jbv_job
+    WHERE job_status = 'Open'
+      AND job_title IS NOT NULL
+      AND job_eid IS NOT NULL;
+    """
+
     try:
         conn = get_redshift_connection()
-        df = pd.read_sql(query_obtain_list_applications, conn)
+        df = pd.read_sql(query, conn)
 
-        df = df.dropna(subset=['job_title', 'eid'])
-        match = df[df['job_title'] == role_name]
+        df = df.dropna(subset=["job_title", "eid"])
+
+        match = df[df["job_title"] == role_name]
 
         if match.empty:
             return None
 
-        eid = match.iloc[0]['eid']
-        link = f"https://jobs.jobvite.com/careers/pragmaticplay/job/{eid}/__jvst=Referral&__jvsd=HiBobID_{user_id}"
+        eid = match.iloc[0]["eid"]
+
+        link = (
+            "https://jobs.jobvite.com/careers/pragmaticplay/job/"
+            f"{eid}/__jvst=Referral&__jvsd=HiBobID_{user_id}"
+        )
 
         return {
-            'job_title': role_name,
-            'eid': eid,
-            'link': link,
+            "job_title": role_name,
+            "eid": eid,
+            "link": link,
         }
 
-    except Exception as e:
-        import traceback
-        print("Error executing query:", e, traceback.format_exc())
+    except Exception as error:
+        print("Error building referral link:", error)
+        print(traceback.format_exc())
         return None
+
+    finally:
+        if conn:
+            conn.close()

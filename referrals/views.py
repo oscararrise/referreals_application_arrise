@@ -1179,20 +1179,13 @@ def clean_role_name_from_country_role(value):
 def create_referral(request):
     generated_link = None
     generated_qr = None
-
     role_name_options = obtain_list_applications()
-
-    print("ROLE OPTIONS COUNT:", len(role_name_options), flush=True)
-    print("ROLE OPTIONS SAMPLE:", role_name_options[:5], flush=True)
-
     form = ReferralForm()
     form.role_name_options = role_name_options
-
     if request.method == "POST":
         action = request.POST.get("action")
         form = ReferralForm(request.POST)
         form.role_name_options = role_name_options
-
         if form.is_valid():
             candidate_name = form.cleaned_data["candidate_name"]
             candidate_email = form.cleaned_data["candidate_email"]
