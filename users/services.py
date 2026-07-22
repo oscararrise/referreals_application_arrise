@@ -20,14 +20,14 @@ def send_otp_email(to_email: str, otp_code: str) -> bool:
         to_emails=to_email,
         subject='ARRISE Referral Platform - Verification code',
         html_content=f"""
-            <div style="font-family: Arial, sans-serif; color: #111827;">
-                <h2>ARRISE Referral Platform</h2>
-                <p>Your verification code is:</p>
-                <h1 style="letter-spacing: 4px;">{otp_code}</h1>
-                <p>This code is valid for a limited time.</p>
-                <p>If you did not request this code, you can ignore this email.</p>
-            </div>
-        """
+    <div style="font-family: Arial, sans-serif; color: #111827;">
+        <h2>ARRISE Referral Platform</h2>
+        <p>Hi, this is your OTP verification code:</p>
+        <h1 style="letter-spacing: 4px;">{otp_code}</h1>
+        <p>This code is valid for 5 minutes.</p>
+        <p>If you did not request this code, you can ignore this email.</p>
+    </div>
+"""
     )
 
     sg = SendGridAPIClient(sendgrid_api_key)

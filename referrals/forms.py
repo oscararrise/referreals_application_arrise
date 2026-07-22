@@ -1,6 +1,6 @@
 from django import forms
 from .models import Referral
-from redshift_client import obtain_list_applications
+from jobvite_job_client import obtain_list_applications
 
 
 class ReferralForm(forms.ModelForm):

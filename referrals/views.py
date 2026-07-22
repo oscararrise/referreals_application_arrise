@@ -10,7 +10,10 @@ from django.db.models import Max, Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from redshift_client import build_referral_link_by_role, obtain_list_applications
+from jobvite_job_client import (
+    build_referral_link_by_role,
+    obtain_list_applications,
+)
 
 from .forms import ReferralForm
 from .models import (
