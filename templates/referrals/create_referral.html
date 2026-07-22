@@ -7,8 +7,9 @@
         <div class="page-card">
             <div class="mb-4">
                 <h2 class="section-title mb-1">Create Referral</h2>
+
                 <p class="text-muted mb-0">
-                    Generate a referral link and optionally send it by email.
+                    Generate a referral link, QR code, or send it by email.
                 </p>
             </div>
 
@@ -22,9 +23,11 @@
                 {% endif %}
 
                 <div class="row g-3">
-
                     <div class="col-md-6">
-                        <label class="form-label">Candidate Name</label>
+                        <label class="form-label">
+                            Candidate Name
+                        </label>
+
                         {{ form.candidate_name }}
 
                         {% if form.candidate_name.errors %}
@@ -35,7 +38,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Candidate Email</label>
+                        <label class="form-label">
+                            Candidate Email
+                        </label>
+
                         {{ form.candidate_email }}
 
                         {% if form.candidate_email.errors %}
@@ -45,9 +51,11 @@
                         {% endif %}
                     </div>
 
-
                     <div class="col-md-6">
-                        <label class="form-label">Role Name</label>
+                        <label class="form-label">
+                            Role Name
+                        </label>
+
                         {{ form.role_name }}
 
                         {% if form.role_name.errors %}
@@ -62,19 +70,87 @@
                             {% endfor %}
                         </datalist>
                     </div>
-
                 </div>
 
-                <div class="mt-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-arrise-primary">
-                        Generate Referral
+                <div class="mt-4 d-flex gap-2 flex-wrap">
+                    <button
+                        type="submit"
+                        name="action"
+                        value="generate_link"
+                        class="btn btn-arrise-primary"
+                    >
+                        Generate QR
                     </button>
 
-                    <a href="/my/" class="btn btn-arrise-secondary">
+                    <button
+                        type="submit"
+                        name="action"
+                        value="send_email"
+                        class="btn btn-arrise-secondary"
+                    >
+                        Send Email
+                    </button>
+
+                    <a
+                        href="/my/"
+                        class="btn btn-outline-secondary"
+                    >
                         Back to Referrals
                     </a>
                 </div>
             </form>
+
+            {% if generated_link %}
+            <hr class="my-4">
+
+            <div class="mt-3">
+                <h5 class="mb-3">
+                    Referral generated
+                </h5>
+
+                <div class="mb-3">
+                    <label
+                        for="generated-referral-link"
+                        class="form-label"
+                    >
+                        Referral link
+                    </label>
+
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ generated_link }}"
+                            readonly
+                            id="generated-referral-link"
+                        >
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            onclick="copyReferralLink()"
+                        >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                {% if generated_qr %}
+                <div class="text-center mt-4">
+                    <h6 class="mb-3">
+                        Referral QR code
+                    </h6>
+
+                    <img
+                        src="data:image/png;base64,{{ generated_qr }}"
+                        alt="Referral QR code"
+                        class="img-fluid border rounded p-2 bg-white"
+                        style="max-width: 280px;"
+                    >
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -82,8 +158,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const roleInput = document.querySelector('[name="role_name"]');
-        const countryInput = document.querySelector('[name="country"]');
-        const options = document.querySelectorAll("#role-name-options option");
+        const options = document.querySelectorAll(
+            "#role-name-options option"
+        );
 
         if (!roleInput) {
             return;
@@ -92,26 +169,77 @@
         roleInput.addEventListener("change", function () {
             const selectedValue = roleInput.value.trim();
 
-            const selectedOption = Array.from(options).find(function (option) {
-                return option.value.trim() === selectedValue;
-            });
+            const selectedOption = Array.from(options).find(
+                function (option) {
+                    return option.value.trim() === selectedValue;
+                }
+            );
 
             if (!selectedOption) {
                 return;
             }
 
-            const country = selectedOption.dataset.country || "";
-            const cleanRole = selectedOption.dataset.role || "";
-
-            if (countryInput && country) {
-                countryInput.value = country;
-            }
-
-            if (cleanRole) {
-                roleInput.value = cleanRole;
-            }
+            roleInput.value = selectedOption.value;
         });
     });
+
+    function copyReferralLink() {
+        const input = document.getElementById(
+            "generated-referral-link"
+        );
+
+        if (!input) {
+            return;
+        }
+
+        if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+        ) {
+            navigator.clipboard
+                .writeText(input.value)
+                .then(function () {
+                    showCopyFeedback();
+                })
+                .catch(function () {
+                    fallbackCopy(input);
+                });
+
+            return;
+        }
+
+        fallbackCopy(input);
+    }
+
+    function fallbackCopy(input) {
+        input.focus();
+        input.select();
+        input.setSelectionRange(
+            0,
+            input.value.length
+        );
+
+        document.execCommand("copy");
+        showCopyFeedback();
+    }
+
+    function showCopyFeedback() {
+        const button = document.querySelector(
+            '[onclick="copyReferralLink()"]'
+        );
+
+        if (!button) {
+            return;
+        }
+
+        const originalText = button.textContent;
+
+        button.textContent = "Copied";
+
+        window.setTimeout(function () {
+            button.textContent = originalText;
+        }, 1500);
+    }
 </script>
 
 {% endblock %}

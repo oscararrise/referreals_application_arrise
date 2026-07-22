@@ -558,7 +558,11 @@ def _get_referrer_eligibility(
 
     is_ta = _is_ta_employee(referrer_employee)
     is_self = _is_self_referral(referrer_employee, candidate_employee)
-    terminated_before_3_months = _hired_referral_terminated_before_3_months(referral)
+    candidate_completed_3_months = (
+    _candidate_completed_3_months(
+        referral
+    )
+)
 
     candidate_start_date = (
         candidate_employee.start_date
@@ -585,7 +589,7 @@ def _get_referrer_eligibility(
         and is_ta == "No"
         and is_self == "No"
         and referrer_termination_condition
-        and terminated_before_3_months == "Yes"
+        and candidate_completed_3_months == "Yes"
     ):
         return "Eligible for bonus"
 
@@ -1193,8 +1197,8 @@ def create_referral(request):
             candidate_name = form.cleaned_data["candidate_name"]
             candidate_email = form.cleaned_data["candidate_email"]
 
-            role_name_display = form.cleaned_data["role_name"]
-            role_name = clean_role_name_from_country_role(role_name_display)
+            
+            role_name = form.cleaned_data["role_name"]
 
             employee = EmployeeDirectoryHiBob.objects.filter(
                 email=request.user.email.lower()
@@ -1518,3 +1522,39 @@ def _format_bonus_amount(value):
         return str(int(amount))
 
     return f"{amount:.2f}".rstrip("0").rstrip(".")
+
+def _candidate_completed_3_months(referral):
+    candidate_employee = getattr(
+        referral,
+        "candidate_employee",
+        None,
+    )
+
+    if not candidate_employee:
+        return "No"
+
+    start_date = _parse_hire_date(
+        candidate_employee.start_date
+    )
+
+    termination_date = _parse_hire_date(
+        candidate_employee.termination_date
+    )
+
+    if not start_date:
+        return "No"
+
+    # Si el candidato ya terminó, compara inicio contra terminación.
+    if termination_date:
+        days_worked = (
+            termination_date - start_date
+        ).days
+
+        return "Yes" if days_worked >= 90 else "No"
+
+    # Si sigue activo, compara inicio contra la fecha actual.
+    days_worked = (
+        datetime.today().date() - start_date
+    ).days
+
+    return "Yes" if days_worked >= 90 else "No"

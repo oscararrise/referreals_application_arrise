@@ -193,6 +193,15 @@ def obtain_list_applications():
         return []
 
 
+def _normalize_role_value(value):
+    return " ".join(
+        str(value or "")
+        .strip()
+        .casefold()
+        .split()
+    )
+
+
 def build_referral_link_by_role(role_name, user_id):
     """
     Find the selected open job and build its referral URL.
@@ -207,6 +216,13 @@ def build_referral_link_by_role(role_name, user_id):
         selected_location, selected_title = selected_role.split(
             " - ",
             1,
+        )
+
+        selected_location_normalized = _normalize_role_value(
+            selected_location
+        )
+        selected_title_normalized = _normalize_role_value(
+            selected_title
         )
 
         jobs = get_open_jobs()
@@ -227,12 +243,19 @@ def build_referral_link_by_role(role_name, user_id):
             country, location = _get_primary_location(job)
             display_location = country or location
 
+            title_normalized = _normalize_role_value(title)
+            location_normalized = _normalize_role_value(
+                display_location
+            )
+
             if (
-                title.casefold() == selected_title.casefold()
-                and display_location.casefold()
-                == selected_location.casefold()
+                title_normalized == selected_title_normalized
+                and location_normalized
+                == selected_location_normalized
             ):
-                apply_link = str(job.get("applyLink") or "").strip()
+                apply_link = str(
+                    job.get("applyLink") or ""
+                ).strip()
 
                 if not apply_link:
                     return None
@@ -257,9 +280,15 @@ def build_referral_link_by_role(role_name, user_id):
         return None
 
     except requests.RequestException as error:
-        print("Error requesting Jobvite job details:", error)
+        print(
+            "Error requesting Jobvite job details:",
+            error,
+        )
         return None
 
     except Exception as error:
-        print("Error building Jobvite referral link:", error)
+        print(
+            "Error building Jobvite referral link:",
+            error,
+        )
         return None
