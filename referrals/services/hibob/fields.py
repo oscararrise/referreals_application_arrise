@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable
 from typing import Any
 
 
-# Stable HiBob fields that map directly to the existing Django model.
+# Exact mapping from the existing PostgreSQL model to HiBob standard fields.
 CORE_MODEL_FIELD_IDS: dict[str, str] = {
     "employee_id": "work.employeeIdInCompany",
     "email": "root.email",
@@ -21,44 +22,50 @@ CORE_MODEL_FIELD_IDS: dict[str, str] = {
 CORE_FIELD_IDS: tuple[str, ...] = tuple(CORE_MODEL_FIELD_IDS.values())
 
 
-# These fields may be custom or renamed in each HiBob tenant. Their real IDs
-# are discovered from /company/people/fields by matching display names.
+# These display names mirror the headers previously imported from HCreport.csv.
+# HiBob metadata provides the real field ID for tenant-specific/custom fields.
 MODEL_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
     "site_country": (
-        "site country",
-        "country of site",
+        "Site country",
+        "Country of site",
     ),
     "business_unit": (
-        "business unit",
-        "business unit current",
+        "Business unit",
+        "Business unit current",
     ),
     "entity": (
-        "entity",
-        "entity current",
-        "legal entity",
+        "Entity (Current)",
+        "Entity",
+        "Legal entity",
+        "Legal Entity",
     ),
     "sub_department": (
-        "sub department",
-        "sub-department",
-        "subdepartment",
+        "Sub Department",
+        "Sub department",
+        "Sub-department",
+        "Subdepartment",
     ),
     "employment_type": (
-        "employment type",
-        "employee type",
+        "Employment type",
+        "Employment Type",
+        "Employee type",
     ),
     "lifecycle_status": (
-        "lifecycle status",
-        "employee status",
-        "status",
+        "Lifecycle status",
+        "Lifecycle Status",
+        "Employee status",
+        "Status",
     ),
     "termination_date": (
-        "termination date",
-        "end date",
+        "Termination date",
+        "Termination Date",
+        "End date",
     ),
     "candidate_jobvite_id": (
-        "candidate jobvite id",
-        "jobvite candidate id",
-        "jobvite id",
+        "Candidate Jobvite ID",
+        "Candidate Jobvite Id",
+        "Jobvite candidate ID",
+        "Jobvite ID",
     ),
 }
 
@@ -120,4 +127,6 @@ def unresolved_model_fields(
 
 
 def _normalize(value: Any) -> str:
-    return " ".join(str(value or "").strip().casefold().split())
+    text = str(value or "").strip().casefold()
+    text = re.sub(r"[^\w]+", " ", text, flags=re.UNICODE)
+    return " ".join(text.split())
