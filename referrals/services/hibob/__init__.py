@@ -1,0 +1,1 @@
+"""HiBob integration service package."""
