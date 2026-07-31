@@ -6,22 +6,23 @@ from collections.abc import Iterable
 from typing import Any
 
 
-# Stable HiBob field IDs used directly by the portal.
-CORE_FIELD_IDS: tuple[str, ...] = (
-    "root.id",
-    "root.email",
-    "root.firstName",
-    "root.surname",
-    "work.employeeIdInCompany",
-    "work.title",
-    "work.department",
-    "work.site",
-    "work.startDate",
-)
+# Stable HiBob fields that map directly to the existing Django model.
+CORE_MODEL_FIELD_IDS: dict[str, str] = {
+    "employee_id": "work.employeeIdInCompany",
+    "email": "root.email",
+    "first_name": "root.firstName",
+    "last_name": "root.surname",
+    "site": "work.site",
+    "department": "work.department",
+    "job_title": "work.title",
+    "start_date": "work.startDate",
+}
+
+CORE_FIELD_IDS: tuple[str, ...] = tuple(CORE_MODEL_FIELD_IDS.values())
 
 
-# Some fields can be custom or renamed in each HiBob tenant. We discover
-# their real field IDs from /company/people/fields using these display names.
+# These fields may be custom or renamed in each HiBob tenant. Their real IDs
+# are discovered from /company/people/fields by matching display names.
 MODEL_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
     "site_country": (
         "site country",
@@ -63,35 +64,27 @@ MODEL_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
 
 
 def resolve_requested_fields(metadata: Iterable[dict[str, Any]]) -> list[str]:
-    """Return the HiBob field IDs needed to populate EmployeeDirectoryHiBob.
+    """Return only the HiBob field IDs needed by EmployeeDirectoryHiBob."""
 
-    Core fields use stable IDs. Tenant-specific fields are resolved from the
-    metadata display name, so no extra field IDs are required in the .env file.
-    """
-
-    metadata_items = [item for item in metadata if isinstance(item, dict)]
-    available_ids = {
-        str(item.get("id") or "").strip()
-        for item in metadata_items
-        if item.get("id")
-    }
-
-    requested: list[str] = []
-
-    for field_id in CORE_FIELD_IDS:
-        if field_id in available_ids:
-            requested.append(field_id)
-
-    lookup = build_model_field_lookup(metadata_items)
-    requested.extend(lookup.values())
-
+    requested = list(CORE_FIELD_IDS)
+    requested.extend(build_model_field_lookup(metadata).values())
     return list(dict.fromkeys(requested))
+
+
+def build_complete_field_lookup(
+    metadata: Iterable[dict[str, Any]],
+) -> dict[str, str]:
+    """Map every resolvable Django model field to a HiBob field ID."""
+
+    result = dict(CORE_MODEL_FIELD_IDS)
+    result.update(build_model_field_lookup(metadata))
+    return result
 
 
 def build_model_field_lookup(
     metadata: Iterable[dict[str, Any]],
 ) -> dict[str, str]:
-    """Map Django model field names to their real HiBob field IDs."""
+    """Map tenant-specific Django model fields to real HiBob field IDs."""
 
     normalized_aliases = {
         model_field: {_normalize(alias) for alias in aliases}
@@ -101,6 +94,9 @@ def build_model_field_lookup(
     result: dict[str, str] = {}
 
     for item in metadata:
+        if not isinstance(item, dict):
+            continue
+
         field_id = str(item.get("id") or "").strip()
         field_name = _normalize(item.get("name"))
 
@@ -112,6 +108,15 @@ def build_model_field_lookup(
                 result[model_field] = field_id
 
     return result
+
+
+def unresolved_model_fields(
+    metadata: Iterable[dict[str, Any]],
+) -> list[str]:
+    """Return optional model fields that could not be resolved in metadata."""
+
+    resolved = build_model_field_lookup(metadata)
+    return sorted(set(MODEL_FIELD_ALIASES) - set(resolved))
 
 
 def _normalize(value: Any) -> str:
