@@ -35,14 +35,94 @@ class EmployeeDirectoryHiBob(models.Model):
 class HiBobEmployee(models.Model):
     hibob_root_id = models.TextField(primary_key=True)
     raw_root_id = models.TextField(blank=True, null=True)
-    raw_root_email = models.TextField(blank=True, null=True)
+
+    email = models.TextField(
+        db_column="raw_root_email",
+        blank=True,
+        null=True,
+    )
+    first_name = models.TextField(
+        db_column="raw_root_firstname",
+        blank=True,
+        null=True,
+    )
+    full_name = models.TextField(
+        db_column="raw_root_fullname",
+        blank=True,
+        null=True,
+    )
+
+    employee_id = models.TextField(
+        db_column="hr_work_employeeidincompany",
+        blank=True,
+        null=True,
+    )
+    job_title = models.TextField(
+        db_column="hr_work_title",
+        blank=True,
+        null=True,
+    )
+    department = models.TextField(
+        db_column="hr_work_department",
+        blank=True,
+        null=True,
+    )
+    site = models.TextField(
+        db_column="hr_work_site",
+        blank=True,
+        null=True,
+    )
+
+    business_unit = models.TextField(
+        db_column="hr_work_customcolumns_column_1697725466779",
+        blank=True,
+        null=True,
+    )
+    sub_department = models.TextField(
+        db_column="hr_work_customcolumns_column_1697815777096",
+        blank=True,
+        null=True,
+    )
+
+    start_date = models.TextField(
+        db_column="hr_work_startdate",
+        blank=True,
+        null=True,
+    )
+    site_country = models.TextField(
+        db_column="hr_address_sitecountry",
+        blank=True,
+        null=True,
+    )
+
+    employment_type = models.TextField(
+        db_column="hr_payroll_employment_type",
+        blank=True,
+        null=True,
+    )
+    entity = models.TextField(
+        db_column="hr_payroll_employment_customcolumns_column_1778834242321",
+        blank=True,
+        null=True,
+    )
+
+    termination_date = models.TextField(
+        db_column="hr_internal_terminationdate",
+        blank=True,
+        null=True,
+    )
+    lifecycle_status = models.TextField(
+        db_column="hr_internal_lifecyclestatus",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         managed = False
         db_table = '"hibob_etl"."employees"'
 
     def __str__(self):
-        return self.raw_root_email or self.hibob_root_id
+        return self.email or self.hibob_root_id
 
 
 class Referral(models.Model):
