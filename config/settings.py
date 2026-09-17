@@ -119,7 +119,16 @@ elif DATABASE_ENGINE == "postgres":
             "HOST": os.getenv("DATABASE_HOST", "localhost"),
             "PORT": os.getenv("DATABASE_PORT", "5432"),
             "CONN_MAX_AGE": int(os.getenv("DATABASE_CONN_MAX_AGE", "60")),
-        }
+        },
+        "hibob": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("HIBOB_DATABASE_NAME", "arrise_vm_db"),
+            "USER": os.getenv("HIBOB_DATABASE_USER", os.getenv("DATABASE_USER")),
+            "PASSWORD": os.getenv("HIBOB_DATABASE_PASSWORD", os.getenv("DATABASE_PASSWORD")),
+            "HOST": os.getenv("HIBOB_DATABASE_HOST", os.getenv("DATABASE_HOST", "localhost")),
+            "PORT": os.getenv("HIBOB_DATABASE_PORT", os.getenv("DATABASE_PORT", "5432")),
+            "CONN_MAX_AGE": int(os.getenv("HIBOB_DATABASE_CONN_MAX_AGE", "60")),
+        },
     }
 
 else:
