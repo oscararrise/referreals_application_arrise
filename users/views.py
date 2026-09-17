@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from .models import Administrador, CustomUser, EmailOTP
-from referrals.models import EmployeeDirectoryHiBob
+from referrals.models import HiBobEmployee
 
 from .models import EmailOTP
 from .services import send_otp_email
@@ -20,7 +20,7 @@ def login_view(request):
             messages.error(request, "Email is required.")
             return render(request, "login.html")
 
-        employee_exists = EmployeeDirectoryHiBob.objects.filter(
+        employee_exists = HiBobEmployee.objects.using("hibob").filter(
             email__iexact=email
         ).exists()
 
