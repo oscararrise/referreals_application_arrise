@@ -32,6 +32,19 @@ class EmployeeDirectoryHiBob(models.Model):
         return f"{self.email} - {self.employee_id}"
 
 
+class HiBobEmployee(models.Model):
+    hibob_root_id = models.TextField(primary_key=True)
+    raw_root_id = models.TextField(blank=True, null=True)
+    raw_root_email = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = '"hibob_etl"."employees"'
+
+    def __str__(self):
+        return self.raw_root_email or self.hibob_root_id
+
+
 class Referral(models.Model):
     STATUS_CHOICES = [
         ("new", "New"),
