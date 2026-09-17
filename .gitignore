@@ -13,3 +13,17 @@ __pycache__/
 *.pyc
 venv/
 .venv/
+# Credenciales y configuracion local
+.env*
+!.env.example
+
+# Exportaciones locales de HiBob
+/empleado_*.json
+/hibob_export/
+/hibob_todos_los_empleados*.xlsx
+/hibob_todos_los_empleados_raw.json
+
+# Bases de datos locales
+*.sqlite3
+*.sqlite
+*.db
